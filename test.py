@@ -4,7 +4,9 @@ from math import sqrt
 from os import remove	
 
 class Factory(object):
-
+    """A collection of static methods that generate standard instances used throughout tests.
+    """
+    
     @staticmethod
     def get_simple_universe():
         position1 = simulate.Vector2D(1, 1)
