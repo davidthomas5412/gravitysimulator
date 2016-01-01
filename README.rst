@@ -6,10 +6,13 @@ This is a simple python simulator that simulates gravity in a 2D universe of bal
 Quick Start
 ===========
 
-For quick start clone this repository and enter the gravitysimulator directory and start your python repl, then either:
+For quick start clone this repository and enter the gravitysimulator directory and start your python repl, then either::
+
     from example import Examples
     Examples.static_identical_planets_example()
-or explicitly:
+
+or explicitly::
+
     from simulate import *
     Simulator([EulerMethodGravityEvolution()], [MergeCollision(), StarFormation()], Universe.star_planet_system(),Iterations(200)).run()
 
@@ -71,10 +74,14 @@ jsonpickle = 0.9.2
 TODO
 ====
 
-Smoother handling of closing/keyboard interrupts etc
-Pausing and Manual Step by Step Iteration
-Robust Playback
-Runge-Kutta Gravity Evolution
-Port evolution policy to C via Cython
+- Smoother handling of closing/keyboard interrupts etc
+
+- Pausing and Manual Step by Step Iteration
+
+- Robust Playback
+
+- Runge-Kutta Gravity Evolution
+
+- Port evolution policy to C via Cython
 
 .. here_: https://youtu.be/gjImA0FkMOc?t=1s
