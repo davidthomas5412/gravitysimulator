@@ -1,17 +1,17 @@
 Introduction
 ============
 
-This is a simple python simulator that simulates gravity in a 2D universe of balls and displays the evolution. A video example can be found _here.
+This is a simple python simulator that simulates gravity in a 2D universe of balls and displays the evolution. A video example can be found here_.
 
 Quick Start
 ===========
 
-For quick start clone this repository and enter the gravitysimulator directory and start your python repl, then either::
+For quick start clone this repository and enter the gravitysimulator directory and start your python repl, then either: ::
 
     from example import Examples
     Examples.static_identical_planets_example()
 
-or explicitly::
+or explicitly: ::
 
     from simulate import *
     Simulator([EulerMethodGravityEvolution()], [MergeCollision(), StarFormation()], Universe.star_planet_system(),Iterations(200)).run()
@@ -19,7 +19,7 @@ or explicitly::
 Core Logic
 ==========
 
-This is the core logic from the simulator which shows how things fit together:
+This is the core logic from the simulator which shows how things fit together: ::
 
     def run(self):
         """Runs the simulation.
@@ -67,8 +67,9 @@ Dependencies
 
 While this has been tested exclusively with Python 2.7.5, it should work on all 2.* versions. It also has dependencies on jsonpickle and pygame:
 
-pygame = 1.9.2pre
-jsonpickle = 0.9.2
+-pygame = '1.9.2pre'
+
+-jsonpickle = '0.9.2'
 
 
 TODO
@@ -84,4 +85,4 @@ TODO
 
 - Port evolution policy to C via Cython
 
-.. here_: https://youtu.be/gjImA0FkMOc?t=1s
+.. _here: https://youtu.be/gjImA0FkMOc?t=1s
