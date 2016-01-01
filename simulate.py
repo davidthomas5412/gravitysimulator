@@ -1,5 +1,5 @@
 from random import randint
-from pygame import display, draw, event, QUIT
+from pygame import display, draw, event, quit, QUIT, KEYDOWN
 from math import sqrt, pi, pow
 from itertools import combinations
 from sys import exit
@@ -22,6 +22,7 @@ class Universe(object):
     NOT_STAR_COLOR = (100, 100, 100)  # grey
     STAR_COLOR = (255,255,0) # yellow
     BACKGROUND_COLOR = (0, 0, 0) # black
+    BORDER_THICKNESS = 2
 
     def __init__(self, points):
         self._points = points
@@ -56,11 +57,16 @@ class Universe(object):
             color = self.NOT_STAR_COLOR
             if (point.star):
                 color = self.STAR_COLOR
-            draw.circle(self._surface, color, point.position.round.tuple, point.radius, 1)
+            draw.circle(self._surface, color, point.position.round.tuple, point.radius, self.BORDER_THICKNESS)
             display.flip()
             for e in event.get():
                 if e.type == QUIT:
-                    exit()
+                    quit()
+                    exit(0)
+
+    def close(self):
+        quit()
+        exit(0)
 
     @staticmethod
     def random(number_points):
@@ -280,22 +286,22 @@ class Simulator(object):
     """The primary class of the module. The Simulator simulates a universe.
 
     Attributes:
-        _evolutionPolicies: List of policies that evolve a universe through one
+        _evolution_policies: List of policies that evolve a universe through one
             iteration (ex. evolving the universe via gravitational accelerations
             of its constituents).
-        _resolutionPolicies: List of policies that resolve a universe
+        _resolution_policies: List of policies that resolve a universe
             immediately after it evolves through one iteration (ex. handling 
             cases where points collide or stars need to be formed).
         _universe: The universe to simulate.
-        _terminationCondition: The condition that signals when to end the
+        _termination_condition: The condition that signals when to end the
             simulation.
     """
 
-    def __init__(self, evolutionPolicies, resolutionPolicies, universe, terminationCondition):
-        self._evolutionPolicies = evolutionPolicies
-        self._resolutionPolicies = resolutionPolicies
+    def __init__(self, evolution_policies, resolution_policies, universe, termination_condition):
+        self._evolution_policies = evolution_policies
+        self._resolution_policies = resolution_policies
         self._universe = universe
-        self._terminationCondition = terminationCondition
+        self._termination_condition = termination_condition
 
     def run(self):
         """Runs the simulation.
@@ -307,15 +313,16 @@ class Simulator(object):
             4) Redraws the universe.
             5) Next iteration.
         """
-        while self._terminationCondition.keepRunning(self._universe):
-            for evolutionPolicy in self._evolutionPolicies:
-                evolutionPolicy.evolve(self._universe)
-            for resolutionPolicy in self._resolutionPolicies:
-                resolutionPolicy.resolve(self._universe)
+        while self._termination_condition.keep_running(self._universe):
+            for evolution_policy in self._evolution_policies:
+                evolution_policy.evolve(self._universe)
+            for resolution_policy in self._resolution_policies:
+                resolution_policy.resolve(self._universe)
             self._universe.draw()
+        self._universe.close()
 
     def __repr__(self):
-        return "Simulator(%s, %s, %s, %s)" % (str(self._evolutionPolicies), str(self._resolutionPolicies), str(self._universe), str(self._terminationCondition))
+        return "Simulator(%s, %s, %s, %s)" % (str(self._evolution_policies), str(self._resolution_policies), str(self._universe), str(self._termination_condition))
 
 ###################################
 ###
@@ -335,7 +342,7 @@ class Iterations(object):
         self._limit = limit
         self._iteration = 0
 
-    def keepRunning(self, universe):
+    def keep_running(self, universe):
         if (self._iteration >= self._limit):
             return False
         self._iteration += 1
@@ -373,13 +380,13 @@ class EulerMethodGravityEvolution(object):
             The acceleration vector of "point".
         """
         # simpler than G = 6.67408 * pow(10,-11)
-        GRAVITATIONAL_CONSTANT = 1 
+        GRAVITATIONAL_CONSTANT = 1
         gravityVector = Vector2D.zero()
         for other_point in other_points:
             diff = point.position - other_point.position
             r = diff.length
-            magnitude = (GRAVITATIONAL_CONSTANT * other_point.  mass) / pow(r, 2)
-            gravityVector = gravityVector + (diff / r) *    magnitude
+            magnitude = (GRAVITATIONAL_CONSTANT * other_point.mass) / pow(r, 2)
+            gravityVector = gravityVector + (diff / r) * magnitude
         return -gravityVector
 
     def evolve(self, universe):

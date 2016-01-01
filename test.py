@@ -1,7 +1,7 @@
 import simulate
 from unittest import TestCase, main
 from math import sqrt
-from os import remove	
+from os import remove   
 
 class Factory(object):
     """A collection of static methods that generate standard instances used throughout tests.
@@ -127,9 +127,9 @@ class IterationsTest(TestCase):
         universe = Factory.get_simple_universe()
         i = 0
         while (i < 20):
-            self.assertTrue(iterations.keepRunning(universe))
+            self.assertTrue(iterations.keep_running(universe))
             i += 1
-        self.assertFalse(iterations.keepRunning(universe))
+        self.assertFalse(iterations.keep_running(universe))
 
 class SerializeTest(TestCase):
 
@@ -155,7 +155,10 @@ class EulerMethodGravityEvolutionTest(TestCase):
 class SimulatorTest(TestCase):
 
     def test_run_simulation(self):
-         Factory.get_simulator().run()
+        with self.assertRaises(SystemExit) as cm:
+            Factory.get_simulator().run()
+        self.assertEqual(cm.exception.code, 0)
+        
 
 if __name__ == '__main__':
     main()
